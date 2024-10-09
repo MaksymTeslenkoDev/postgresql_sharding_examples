@@ -1,0 +1,23 @@
+# Use the lightweight Alpine-based PostgreSQL 16 image
+FROM postgres:16
+
+# Install the necessary build dependencies for PL/Proxy
+RUN apt-get update && apt-get install -y \
+    git \
+    make \
+    gcc \
+    flex \
+    bison \
+    postgresql-server-dev-16
+
+# Clone and install PL/Proxy
+RUN git clone https://github.com/plproxy/plproxy.git /usr/src/plproxy && \
+    cd /usr/src/plproxy && \
+    make && \
+    make install
+
+# Clean up the unnecessary files to reduce image size
+RUN apt-get remove -y git make gcc flex bison && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* /usr/src/plproxy
+
+# Expose the PostgreSQL port
+EXPOSE 5432
