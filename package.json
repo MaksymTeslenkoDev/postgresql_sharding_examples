@@ -9,8 +9,8 @@
     "partition:init":"cat postgresql/partitioning/init.sql | docker exec -i partition_pg_store psql -U marcus -d store -W",
     "sharding:fdw:setup":"cat postgresql/sharding/fdw.setup.sql | docker exec -i store_main psql -U marcus -d store -W",
     "db:seed":"cat postgresql/seed.sql | docker exec -i store_main psql -U marcus -d store -W",
-    "plproxy:db:seed":"cat postgresql/seed.sql | docker exec -i plproxy_store_main psql -U marcus -d store -W",
-    "sharding:plproxy:setup":"cat postgresql/sharding/plproxy.setup.sql | docker exec -i plproxy_store_main psql -U marcus -d store -W"
+    "plproxy:db:seed":"cat postgresql/plproxy/seed.sql | docker exec -i plproxy_store_main psql -U marcus -d store -W",
+    "sharding:proxy:setup":"cat postgresql/plproxy/proxy.setup.sql | docker exec -i plproxy_store_main psql -U marcus -d store -W"
   },
   "author": "",
   "license": "ISC"
