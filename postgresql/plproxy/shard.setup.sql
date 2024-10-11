@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS products (
     amount INT NOT NULL,
     product_type INT NOT NULL
 );
+CREATE INDEX idx_products_amount ON products(amount);
+CREATE INDEX idx_products_price ON products(price);
+CREATE INDEX idx_products_product_type ON products(product_type);
 
 CREATE OR REPLACE FUNCTION insert_product(
     name text,
@@ -26,11 +29,12 @@ RETURNS SETOF products AS $$
     LIMIT $2 OFFSET $3;
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION get_products_filtered(amount_min NUMERIC, amount_max NUMERIC, price_min NUMERIC, price_max NUMERIC, limit_param INT, offset_param INT)
+CREATE OR REPLACE FUNCTION get_products_filtered(product_type INT, amount_min NUMERIC, amount_max NUMERIC, price_min NUMERIC, price_max NUMERIC, limit_param INT, offset_param INT)
 RETURNS SETOF products AS $$
     SELECT id, name, price, amount, product_type
     FROM products
-    WHERE amount BETWEEN $1 AND $2
-      AND price BETWEEN $3 AND $4
-    LIMIT $5 OFFSET $6;
+    WHERE product_type = $1
+        AND amount BETWEEN $2 AND $3
+      AND price BETWEEN $4 AND $5
+    LIMIT $6 OFFSET $7;
 $$ LANGUAGE SQL;

@@ -29,8 +29,8 @@ RETURNS SETOF TEXT AS $$
 BEGIN
     IF cluster_name = 'products_cluster' THEN
         RETURN NEXT 'host=plproxy_store_shard1 port=5432 dbname=store user=marcus password=marcus';
+        RETURN NEXT 'host=plproxy_store_shard1 port=5432 dbname=store user=marcus password=marcus';
         RETURN NEXT 'host=plproxy_store_shard2 port=5432 dbname=store user=marcus password=marcus';
-        RETURN NEXT 'host=plproxy_store_shard3 port=5432 dbname=store user=marcus password=marcus';
         RETURN NEXT 'host=plproxy_store_shard3 port=5432 dbname=store user=marcus password=marcus';
         RETURN;
     END IF;
@@ -50,11 +50,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION partition_function(key int)
 RETURNS INTEGER AS $$
 BEGIN
-    IF ((key%3) = 0) THEN
-        return 3;
-    ELSE
-        RETURN (key % 3);
-    END IF;
+    RETURN key;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 
@@ -70,8 +66,8 @@ RETURNS SETOF products AS $$
 $$ LANGUAGE plproxy;
 
 -- Having 3 shards and specify LIMIT 10, we may receive up to 30 rows in total (10 from each shard).
-CREATE OR REPLACE FUNCTION get_products_filtered(amount_min NUMERIC, amount_max NUMERIC, price_min NUMERIC, price_max NUMERIC, limit_param INT, offset_param INT)
+CREATE OR REPLACE FUNCTION get_products_filtered(product_type INT, amount_min NUMERIC, amount_max NUMERIC, price_min NUMERIC, price_max NUMERIC, limit_param INT, offset_param INT)
 RETURNS SETOF products AS $$
     CLUSTER 'products_cluster';
-    RUN ON ALL;
+    RUN ON partition_function(product_type);
 $$ LANGUAGE plproxy;

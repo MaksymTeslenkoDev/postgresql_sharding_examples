@@ -20,24 +20,34 @@ module.exports = async function productsRoutes(fastify, opts) {
       const { count } = request.params;
 
       if (!count) throw new Error('count not provided');
-
+      const query = fastify.queryBuilder.insert();
       const client = await fastify.pg.connect();
       fastify.log.info(`Start inserting ${count} products`);
       try {
         for await (let { name, price, amount, type } of generator(count)) {
-        //   const id = await client.query(
-        //     'INSERT INTO products(name, price, amount, product_type) VALUES($1,$2,$3,$4) RETURNING id',
-        //     [name, price, amount, type],
-        //   );
-          await client.query(
-            'INSERT INTO products(name, price, amount, product_type) VALUES($1,$2,$3,$4)',
-            [name, price, amount, type],
-          );
-        //   fastify.log.info(`New row inserted: { id: ${id} }`);
+          await client.query(query, [name, price, amount, type]);
+          fastify.log.info(`New row inserted, name ${name}`);
         }
         client.release();
         fastify.log.info(`Finished`);
         return `Insertion of ${count} items finished`;
+      } catch (err) {
+        client.release();
+        throw err;
+      }
+    },
+  });
+  fastify.route({
+    method: 'GET',
+    url: '/products',
+    handler: async function filterProducts(request, reply) {
+      const queryParams = request.query;
+      const query = fastify.queryBuilder.filter();
+      const client = await fastify.pg.connect();
+      try {
+        const rows = await client.query(query, Object.values(queryParams));
+        client.release();
+        return { rows };
       } catch (err) {
         client.release();
         throw err;
