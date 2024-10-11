@@ -20,6 +20,7 @@ module.exports = async function productsRoutes(fastify, opts) {
       const { count } = request.params;
 
       if (!count) throw new Error('count not provided');
+
       const client = await fastify.pg.connect();
       fastify.log.info(`Start inserting ${count} products`);
       try {
@@ -30,6 +31,7 @@ module.exports = async function productsRoutes(fastify, opts) {
           );
           fastify.log.info(`New row inserted: { id: ${id} }`);
         }
+        client.release();
         fastify.log.info(`Finished`);
         return `Insertion of ${count} items finished`;
       } catch (err) {
