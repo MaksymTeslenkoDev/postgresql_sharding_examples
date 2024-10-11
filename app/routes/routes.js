@@ -25,11 +25,15 @@ module.exports = async function productsRoutes(fastify, opts) {
       fastify.log.info(`Start inserting ${count} products`);
       try {
         for await (let { name, price, amount, type } of generator(count)) {
-          const id = await client.query(
-            'INSERT INTO products(name, price, amount, product_type) VALUES($1,$2,$3,$4) RETURNING id',
+        //   const id = await client.query(
+        //     'INSERT INTO products(name, price, amount, product_type) VALUES($1,$2,$3,$4) RETURNING id',
+        //     [name, price, amount, type],
+        //   );
+          await client.query(
+            'INSERT INTO products(name, price, amount, product_type) VALUES($1,$2,$3,$4)',
             [name, price, amount, type],
           );
-          fastify.log.info(`New row inserted: { id: ${id} }`);
+        //   fastify.log.info(`New row inserted: { id: ${id} }`);
         }
         client.release();
         fastify.log.info(`Finished`);

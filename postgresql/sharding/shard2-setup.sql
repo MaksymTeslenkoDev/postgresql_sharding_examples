@@ -7,4 +7,6 @@ CREATE TABLE products_2 (
     product_type INT NOT NULL,
     CONSTRAINT product_type_check CHECK (product_type = 2)
 );
-CREATE INDEX products_product_type_idx ON products_2 USING btree(product_type)
+CREATE INDEX idx_products_amount ON products_2(amount);
+CREATE INDEX idx_products_price ON products_2(price);
+CREATE INDEX idx_products_product_type ON products_2(product_type);

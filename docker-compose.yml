@@ -23,8 +23,8 @@ services:
       POSTGRES_DB: store
     ports:
       - "5432:5432"
-    volumes:
-      - partition_data:/var/lib/postgresql/data
+    # volumes:
+      # - partition_data:/var/lib/postgresql/data
     networks:
       - sharding_example_network
     profiles:
@@ -40,7 +40,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - store_main_data:/var/lib/postgresql/data
+      # - store_main_data:/var/lib/postgresql/data
       - ./postgresql/sharding/shard1-setup.sql:/docker-entrypoint-initdb.d/shard1-setup.sql
     networks:
       - sharding_example_network
@@ -57,7 +57,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - store_shard1_data:/var/lib/postgresql/data
+      # - store_shard1_data:/var/lib/postgresql/data
       - ./postgresql/sharding/shard2-setup.sql:/docker-entrypoint-initdb.d/shard2-setup.sql
     networks:
       - sharding_example_network
@@ -74,7 +74,7 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - store_shard2_data:/var/lib/postgresql/data
+      # - store_shard2_data:/var/lib/postgresql/data
       - ./postgresql/sharding/shard3-setup.sql:/docker-entrypoint-initdb.d/shard3-setup.sql
     networks:
       - sharding_example_network
@@ -110,7 +110,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - store_plproxy_shard1_data:/var/lib/postgresql/data
+      # - store_plproxy_shard1_data:/var/lib/postgresql/data
       - ./postgresql/plproxy/shard.setup.sql:/docker-entrypoint-initdb.d/shard.setup.sql
     networks:
       - sharding_example_network
@@ -127,7 +127,7 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - store_plproxy_shard2_data:/var/lib/postgresql/data
+      # - store_plproxy_shard2_data:/var/lib/postgresql/data
       - ./postgresql/plproxy/shard.setup.sql:/docker-entrypoint-initdb.d/shard.setup.sql
     networks:
       - sharding_example_network
@@ -144,7 +144,7 @@ services:
     ports:
       - "5435:5432"
     volumes:
-      - store_plproxy_shard3_data:/var/lib/postgresql/data
+      # - store_plproxy_shard3_data:/var/lib/postgresql/data
       - ./postgresql/plproxy/shard.setup.sql:/docker-entrypoint-initdb.d/shard.setup.sql
     networks:
       - sharding_example_network
@@ -153,14 +153,14 @@ services:
 
 volumes:
   partition_data:
-  store_main_data:
-  store_shard1_data:
-  store_shard2_data:
-  store_plproxy_main_data:
-  store_plproxy_shard1_data:
-  store_plproxy_shard2_data:
-  store_plproxy_shard3_data:
-  plproxy_store_main_data:
+  # store_main_data:
+  # store_shard1_data:
+  # store_shard2_data:
+  # store_plproxy_main_data:
+  # store_plproxy_shard1_data:
+  # store_plproxy_shard2_data:
+  # store_plproxy_shard3_data:
+  # plproxy_store_main_data:
 
 networks:
   sharding_example_network:

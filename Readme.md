@@ -32,3 +32,39 @@ Failed transactions:               0
 Longest transaction:           66.14
 Shortest transaction:          65.48
 ```
+
+### Native Sharding (FDW extension)
+
+1. Request: siege -c10 -r1 -b 'http://0.0.0.0:3000/products/100000 POST' -H "Content-Type: text/plain"
+Result: 
+```bash
+Transactions:                     10 hits
+Availability:                 100.00 %
+Elapsed time:                 169.77 secs
+Data transferred:               0.00 MB
+Response time:                169.53 secs
+Transaction rate:               0.06 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                    9.99
+Successful transactions:          10
+Failed transactions:               0
+Longest transaction:          169.77
+Shortest transaction:         169.02
+```
+
+2. Request: siege -c100 -r1 -b 'http://0.0.0.0:3000/products/10000 POST' -H "Content-Type: text/plain"
+Result:
+```bash
+Transactions:                    100 hits
+Availability:                 100.00 %
+Elapsed time:                 108.96 secs
+Data transferred:               0.00 MB
+Response time:                107.91 secs
+Transaction rate:               0.92 trans/sec
+Throughput:                     0.00 MB/sec
+Concurrency:                   99.04
+Successful transactions:         100
+Failed transactions:               0
+Longest transaction:          108.95
+Shortest transaction:         104.21
+```
